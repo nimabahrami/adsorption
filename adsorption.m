@@ -23,7 +23,7 @@ q_des = q_st;
 
 %% Main
 % user selection
-fprintf('------------------choosing state-----------------------')
+fprintf('------------------choosing state----------------------- \n')
 fprintf('please choose your mode: \n')
 user = strcmp(input('AD + Cooling ? (Y/N) \n \n'),'Y');
 
@@ -106,7 +106,7 @@ end
 
 %% ploting
 
-fprintf('------------------Plotting effect -----------------------')
+fprintf('------------------Plotting effect ----------------------- \n')
 user = strcmp(input('Do you want to plot the potable water mass \br in different temperature ranges \n for the first state? \n (Y/N) \n \n'),'Y');
 if user == 1
     t1 = linspace(t_cw,50+273,10);
@@ -126,7 +126,7 @@ if user == 1
     end
     
     plot(t1,m_water,'k--')
-	axis([t1(1)-5 t1(end)+5 0.1 2])
+	axis([t1(1)-5 t1(end)+5 0.05 2.5])
     xlabel('Cool water temperature (K)')
     ylabel('Potable water output (kg)')
     title('the effect of increasing cold water temperature on mass of potable water')
