@@ -6,7 +6,9 @@ format short g
 
 p_eva = 1401;
 p_cond = 4498;
-t_cw = 25 + 273;
+T_cw_user = input('Please enter cold water temperature: (celsius) \n');
+T_hw_user = input('Please enter hot water temperature: (celsius) \n');
+t_cw = T_cw_user + 273;
 t_hw = 85 + 273;
 m_sg = 6.75;
 c_sg = 924;
@@ -21,7 +23,7 @@ q_des = q_st;
 
 %% Main
 % user selection
-
+fprintf('------------------choosing state-----------------------')
 fprintf('please choose your mode: \n')
 user = strcmp(input('AD + Cooling ? (Y/N) \n \n'),'Y');
 
@@ -101,4 +103,33 @@ else if user == 0
         end
     end
 end
- publish('thermo.m','evalCode',false)        
+
+%% ploting
+
+fprintf('------------------Plotting effect -----------------------')
+user = strcmp(input('Do you want to plot the potable water mass \br in different temperature ranges \n for the first state? \n (Y/N) \n \n'),'Y');
+if user == 1
+    t1 = linspace(t_cw,50+273,10);
+    t3 = ones(1,numel(t1))*t_hw;
+    t2 = ones(1,numel(t1));
+    t4 = ones(1,numel(t1));
+    X2 = ones(1,numel(t1));
+    X3 = ones(1,numel(t1));
+    m_water = ones(1,numel(t1));
+   
+    for i=1:numel(t1)
+        t2(i) = abs((-1*q_st)/(r*(log(p1/p2)+(q_st/(r*t1(i))))));
+        t4(i) = q_st/(r*(log(p3/p4)+(q_st/(r*t3(i)))));
+        X2(i) = p2*k_0i*exp(q_st/(r*t2(i)));
+        X3(i) = p3*k_0i*exp(q_st/(r*t3(i)));
+        m_water(i) = (X2(i) - X3(i))*m_sg;
+    end
+    
+    plot(t1,m_water,'k--')
+	axis([t1(1)-5 t1(end)+5 0.1 2])
+    xlabel('Cool water temperature (K)')
+    ylabel('Potable water output (kg)')
+    title('the effect of increasing cold water temperature on mass of potable water')
+            
+else fprintf('ok')
+end
