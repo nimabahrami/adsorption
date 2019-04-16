@@ -13,19 +13,19 @@ t_hw = T_hw_user + 273;
 m_sg = 6.75;
 c_sg = 924;
 c_water = 4180;
-q_st = 2510000;
-k_0i = 2*10^(-12);
+q_st = 2510000; % is assumed in article
+k_0i = 2*10^(-12); % is assumed in article
 r = 461.52;
 
 %% Parameters
-q_ads = q_st;
-q_des = q_st;
+q_ads = q_st;   % is assumed in article
+q_des = q_st;   % is assumed in article
 
 %% Main
 % user selection
 fprintf('------------------choosing state----------------------- \n')
 fprintf('please choose your mode: \n')
-user = strcmp(input('AD + Cooling ? (Y/N) \n \n'),'Y');
+user = strcmp(input('AD + Cooling ? (Y/N) \n \n'),'Y'); % user selects status type exactly 'Y'
 
 % Evaluation
 
@@ -43,6 +43,7 @@ if user == 1
     X2 = p2*k_0i*exp(q_st/(r*t2));
     X3 = p3*k_0i*exp(q_st/(r*t3));
     X4 = p4*k_0i*exp(q_st/(r*t4));
+    
     m_water = (X2 - X3)*m_sg;
     q_12 = (X1 * m_sg * c_water + m_sg * c_sg)*(t2 - t1);
     q_23 = (m_sg * c_sg + ((X2 + X3)/2) * m_sg * c_water)*(t3 - t2) + (X2 - X3) * m_sg * q_des;
@@ -125,11 +126,19 @@ if user == 1
         m_water(i) = (X2(i) - X3(i))*m_sg;
     end
     
+    subplot(2,1,1)
     plot(t1,m_water,'k--')
 	axis([t1(1)-5 t1(end)+5 0.05 2.5])
     xlabel('Cool water temperature (K)')
     ylabel('Potable water output (kg)')
     title('the effect of increasing cold water temperature on mass of potable water')
+    
+    subplot(2,1,2)
+    plot(t1,X2,'r--')
+	axis([t1(1)-5 t1(end)+5 0 0.3])
+    xlabel('Cool water temperature (K)')
+    ylabel('amount adsorbed by adsbnt(kg/kg dry adsbnt)')
+    title('the effect of increasing cold water temperature on X ')
             
-else fprintf('ok')
+else fprintf('Okay! Good luck!')
 end
